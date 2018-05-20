@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="img/logo.png" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Who called you?</title>
+</head>
+
+<body>
+    <header class="container-fluid d-flex align-items-center">
+    </header>
+    <div class="mr-auto logo">
+        <a href="index.html">
+            <img src="img/logo.png"> WHO CALLED YOU</a>
+    </div>
+    <main class="container d-flex flex-column align-items-center center">
+        <div class="slogan">Find out who called you!</div>
+        <form id="search-form" class="form-inline w-50 mt-5">
+            <div class="input-group w-100 ">
+                <input id="search-input" class="form-control form-control-sm border-dark " placeholder="Phone number" required="">
+                <div class="input-group-append ">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="comments w-75">
+
+        </div>
+        <form id="info-form" class="w-75 hide">
+            <div class="form-group">
+                <label for="message">Your comment</label>
+                <textarea class="form-control" id="message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary col-4 ml-auto">Save</button>
+        </form>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bignumber.js/7.0.1/bignumber.min.js"></script>
+    <script src="js/nebulas.js"></script>
+    <script src="js/nebPay.js"></script>
+    <script src="js/contractApi.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        'use strict';
+        window.addEventListener("load", function () {
+            let isExtensionExist = typeof (webExtensionWallet) !== "undefined";
+            if (!isExtensionExist) {
+
+            }
+            else {
+                let api = new PhoneContract();
+                $("#search-form").submit(function (event) {
+                    event.preventDefault();
+
+                    let phone = $("#search-input").val().trim();
+                    $("#info-form").addClass('hide');
+                    $(".comments").empty();
+                    $("#info-form").data("phone", phone);
+                    api.getComments(phone, resp => {
+                        if (resp && resp.result) {
+                            $(".comments").append("<h4>Comments</h4>");
+                            $("#message").val("");
+                            $("#info-form").removeClass('hide')
+                            let comments = JSON.parse(resp.result);
+
+                            if (comments.length == 0) {
+                                $(".comments").append('<div class="no-comments">There are no comments on the number yet. Be the first!</div>');
+                            }
+                            comments.sort((a, b) => a.date >= b.date ? -1 : 1);
+                            for (const comment of comments) {
+                                $(".comments").append(`<div class="comment">
+                                                        <div class="comment-header d-flex justify-content-between align-items-center text-muted">
+                                                            <span>${convertUnixStampToScreenDate(comment.date, true)}</span>
+                                                            <span>${comment.author}</span>
+                                                        </div>
+                                                        <div class="comment-body">${comment.message}</div>
+                                                    </div>`);
+                            }
+
+                        }
+                        else {
+                            $(".comments").append('<div class="no-comments">There are no comments on the number yet. Be the first!</div>');
+                        }
+                    });
+
+                    $("#info-form").submit(function (event) {
+                        event.preventDefault();
+                        let phone = $("#info-form").data("phone");
+                        let message = $("#message").val();
+
+                        api.addComment(phone, message);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

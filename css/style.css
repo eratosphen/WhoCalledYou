@@ -1,0 +1,91 @@
+.hide {
+    display: none !important;
+}
+
+body {
+	position: relative;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    min-width: 800px;
+    min-height: 100vh;
+    position: relative;
+	margin: 0;
+	background: url("../img/background1.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+header {
+	min-height: 60px;
+	opacity: 0.7;
+	padding: 10px;
+	background: #262626;
+}
+
+.logo img {	
+	width: 40px;
+	margin-right: 10px;
+}
+
+.logo {
+	color: white;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 1;
+}
+
+.slogan {
+	text-transform: uppercase; 
+	font-size: 36px;
+}
+
+.title {
+	font-size: 24px;
+	color: white;
+}
+
+main {
+	background: rgba(255, 255, 255, 0.2);
+	margin-top: 40px;
+	padding: 40px 0;
+}
+
+#info-form, .comments {
+	margin-top: 40px;
+	background: white;
+}
+
+#info-form {
+	padding: 20px;
+}
+
+.comments h4 {
+	text-align: center;
+	padding: 20px 0;
+	border-bottom: 1px solid #d6d5d5;
+}
+
+.comment {
+	padding: 20px;
+	/* margin-top: 20px; */
+	border-bottom: 1px solid #d6d5d5;
+}
+
+.comment-header {
+	font-size: 14px;
+}
+
+.comment-body {
+	margin: 20px 0;
+}
+
+.no-comments {
+	padding: 20px;
+	font-style: italic;
+}
+
+.logo a {
+	color: white;
+	text-decoration: none;
+}
