@@ -94,15 +94,15 @@
                             $(".comments").append('<div class="no-comments">There are no comments on the number yet. Be the first!</div>');
                         }
                     });
-
-                    $("#info-form").submit(function (event) {
+                    
+                });
+                $("#info-form").submit(function (event) {
                         event.preventDefault();
                         let phone = $("#info-form").data("phone");
                         let message = $("#message").val();
 
                         api.addComment(phone, message);
                     });
-                });
             }
         });
     </script>
